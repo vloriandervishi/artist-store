@@ -122,20 +122,21 @@ const SearchArt = () => {
         </h2>
         <CardColumns>
           {searchArt.map((art, i) => {
-            const testDecode = art.thumbnail.lqip;
-            console.log(testDecode)
-            const reader = new FileReader();
-            reader.readAsBinaryString(testDecode);
-            reader.onload = () => {
-              console.log(reader.result)
-            }
+           // const testDecode = art.thumbnail.lqip;
+           // console.log(testDecode)
+          //  const reader = new FileReader();
+          //  reader.readAsBinaryString(testDecode);
+           // reader.onload = () => {
+              //console.log(reader.result)
+          //  }
             // const atobTest = Window.prototype.atob(testDecode);
             // console.log('decoded image ', atobTest)
-            console.log(art)
+            //console.log(art);
             return (
               <Card key={i++} border='dark'>
-                {art.image ? (
-                  <Card.Img src={art.image} alt={`The cover for ${art.title}`} variant='top' />
+                {art? (
+                  <Card.Img src={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`
+                  } alt={`The cover for ${art.title}`} variant='top' />
                 ) : null}
                 <Card.Body>
                   <Card.Title>{art.title}</Card.Title>
