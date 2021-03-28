@@ -53,6 +53,7 @@ export const deleteArt = (ArtId, token) => {
 // make a search to google books api
 // https://www.googleapis.com/books/v1/volumes?q=harry+potter
 export const searchArtApi= (query) => {
-  return fetch(`https://api.artic.edu/api/v1/artworks/search?q=${query}`);
+  return fetch(`https://api.artic.edu/api/v1/artworks/search?query${query}[is_public_domain]=true&limit=2&fields=id,title,image_id
+  `);
   
 };
