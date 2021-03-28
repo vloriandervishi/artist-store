@@ -1,61 +1,70 @@
 import React, { useState, useEffect } from 'react';
 import { Jumbotron, Container, Col, Form, Button, Card, CardColumns } from 'react-bootstrap';
-
+// import atob from 'átob';
 import Auth from '../utils/auth';
-import { saveBook, searchArtPainting } from '../utils/API';
+import { saveArt, searchArtApi} from '../utils/API';
 import { saveArtIds, getSavedArtIds } from '../utils/localStorage';
 
 const SearchArt = () => {
   // create state for holding returned google api data
-  const [searchedBooks, setSearchedArt] = useState([]);
+  const [searchArt, setSearchedArt] = useState([]);
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
 
-  // create state to hold saved bookId values
-  const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+  // create state to hold saved artId values
+  const [savedArtIds, setSavedArtIds] = useState(getSavedArtIds());
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
     return () => saveArtIds(savedArtIds);
-  });
+  }, [savedArtIds]);
 
   // create method to search for books and set state on form submit
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-
-    if (!searchInput) {
-      return false;
-    }
-
+  const handleSearchArtAPI = async (query) => {
     try {
-      const response = await searchArtPainting(searchInput);
+      const response = await searchArtApi(query);
 
+      
       if (!response.ok) {
         throw new Error('something went wrong!');
       }
 
-      const { items } = await response.json();
-
-      const ArtData = items.map((art) => ({
-        ArtId: art.id,
-        authors: art.volumeInfo.authors || ['No author to display'],
-        title: art.volumeInfo.title,
-        description: art.volumeInfo.description,
-        image: art.volumeInfo.imageLinks?.thumbnail || '',
-      }));
-
-      setSearchedArt(ArtData);
-      setSearchInput('');
+      const items  = await response.json();
+      setSearchedArt(items.data);
+      setSearchInput('')
+      console.log(items.data)
+      // const ArtData = items.map((art) => ({
+      //   artId: art.data.id,
+      //   authors: art.authors || ['No author to display'],
+      //   title: art.data.title,
+      //   description: art.data.alt_text,
+      //   image: art.data.api_link?.thumbnail || '',
+      // }));
+      // setSearchedArt(ArtData);
+      // setSearchInput('');
     } catch (err) {
       console.error(err);
     }
   };
 
+  useEffect(() => {
+    handleSearchArtAPI('çat');
+  }, [])
+
+  const handleFormSubmit = event => {
+    event.preventDefault();
+    if (!searchInput) {
+      return false;
+    }
+
+    handleSearchArtAPI(searchInput)
+  }
+
   // create function to handle saving a book to our database
-  const handleSaveBook = async (bookId) => {
+  const handleSaveArt = async (ArtId) => {
     // find the book in `searchedBooks` state by the matching id
-    const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
+    const artToSave = setSearchedArt.find((art) =>art.artId === art.Id);
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -72,7 +81,7 @@ const SearchArt = () => {
       }
 
       // if book successfully saves to user's account, save book id to state
-      setSavedBookIds([...savedBookIds, bookToSave.bookId]);
+      setSavedArtIds([...savedArtIds, artToSave.saveId]);
     } catch (err) {
       console.error(err);
     }
@@ -107,29 +116,39 @@ const SearchArt = () => {
 
       <Container>
         <h2>
-          {searchedBooks.length
-            ? `Viewing ${searchedBooks.length} results:`
+          {searchArt !=null && searchArt.length > 0
+            ? `Viewing ${searchArtApi.length} results:`
             : 'Search for Art Painting'}
         </h2>
         <CardColumns>
-          {searchedBooks.map((book) => {
+          {searchArt.map((art, i) => {
+            const testDecode = art.thumbnail.lqip;
+            console.log(testDecode)
+            const reader = new FileReader();
+            reader.readAsBinaryString(testDecode);
+            reader.onload = () => {
+              console.log(reader.result)
+            }
+            // const atobTest = Window.prototype.atob(testDecode);
+            // console.log('decoded image ', atobTest)
+            console.log(art)
             return (
-              <Card key={book.bookId} border='dark'>
-                {book.image ? (
-                  <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
+              <Card key={i++} border='dark'>
+                {art.image ? (
+                  <Card.Img src={art.image} alt={`The cover for ${art.title}`} variant='top' />
                 ) : null}
                 <Card.Body>
-                  <Card.Title>{book.title}</Card.Title>
-                  <p className='small'>Authors: {book.authors}</p>
-                  <Card.Text>{book.description}</Card.Text>
+                  <Card.Title>{art.title}</Card.Title>
+                  <p className='small'>Authors: {art.authors}</p>
+                  <Card.Text>{art.description}</Card.Text>
                   {Auth.loggedIn() && (
                     <Button
-                      disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}
+                      disabled={savedArtIds?.some((savedartId) => savedartId === art.artId)}
                       className='btn-block btn-info'
-                      onClick={() => handleSaveBook(book.bookId)}>
-                      {savedBookIds?.some((savedBookId) => savedBookId === book.bookId)
-                        ? 'This book has already been saved!'
-                        : 'Save this Book!'}
+                      onClick={() => handleSaveArt(art.Id)}>
+                      {savedArtIds?.some((savedArtId) => savedArtId === art.artId)
+                        ? 'This art has already been saved!'
+                        : 'Save this Art!'}
                     </Button>
                   )}
                 </Card.Body>

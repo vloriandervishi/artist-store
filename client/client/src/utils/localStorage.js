@@ -1,4 +1,4 @@
-export const getSavedBookIds = () => {
+export const getSavedArtIds = () => {
   const savedBookIds = localStorage.getItem('saved_books')
     ? JSON.parse(localStorage.getItem('saved_books'))
     : [];
@@ -7,14 +7,14 @@ export const getSavedBookIds = () => {
 };
 
 export const saveArtIds = (bookIdArr) => {
-  if (bookIdArr.length) {
+  if (bookIdArr !=null && bookIdArr.length > 0) {
     localStorage.setItem('saved_books', JSON.stringify(bookIdArr));
   } else {
     localStorage.removeItem('saved_books');
   }
 };
 
-export const removeArtkId = (bookId) => {
+export const removeArtId = (bookId) => {
   const savedBookIds = localStorage.getItem('saved_books')
     ? JSON.parse(localStorage.getItem('saved_books'))
     : null;

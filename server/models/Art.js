@@ -28,4 +28,4 @@ const ArtSchema = new Schema({
   },
 });
 
-module.exports = bookSchema;
+module.exports = ArtSchema;

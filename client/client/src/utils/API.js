@@ -41,8 +41,8 @@ export const saveArt = (ArtData, token) => {
 };
 
 // remove saved book data for a logged in user
-export const deleteBook = (ArtId, token) => {
-  return fetch(`/api/users/books/${ArtId}`, {
+export const deleteArt = (ArtId, token) => {
+  return fetch(`/api/users/arts/${ArtId}`, {
     method: 'DELETE',
     headers: {
       authorization: `Bearer ${token}`,
@@ -52,6 +52,7 @@ export const deleteBook = (ArtId, token) => {
 
 // make a search to google books api
 // https://www.googleapis.com/books/v1/volumes?q=harry+potter
-export const searchArtPainting = (query) => {
+export const searchArtApi= (query) => {
   return fetch(`https://api.artic.edu/api/v1/artworks/search?q=${query}`);
+  
 };
