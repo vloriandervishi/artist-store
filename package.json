@@ -24,7 +24,8 @@
     "bootstrap": "^4.6.0",
     "graphql": "^15.5.0",
     "graphql-tag": "^2.12.1",
-    "if-env": "^1.0.4"
+    "if-env": "^1.0.4",
+    "per-env": "^1.0.2"
   },
   "devDependencies": {
     "concurrently": "^5.2.0"
