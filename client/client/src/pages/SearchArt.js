@@ -48,9 +48,9 @@ const SearchArt = () => {
     }
   };
 
-  useEffect(() => {
-    handleSearchArtAPI('çat');
-  }, [])
+  // useEffect(() => {
+  //   handleSearchArtAPI('cat');
+  // }, [])
 
   const handleFormSubmit = event => {
     event.preventDefault();
@@ -64,7 +64,7 @@ const SearchArt = () => {
   // create function to handle saving a book to our database
   const handleSaveArt = async (ArtId) => {
     // find the book in `searchedBooks` state by the matching id
-    const artToSave = setSearchedArt.find((art) =>art.artId === art.Id);
+    const artToSave = setSearchedArt.find((art) =>art.Id === art.Id);
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -134,14 +134,14 @@ const SearchArt = () => {
             //console.log(art);
             return (
               <Card key={i++} border='dark'>
-                {art? (
+                {art.image_id? (
                   <Card.Img src={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`
                   } alt={`The cover for ${art.title}`} variant='top' />
                 ) : null}
                 <Card.Body>
                   <Card.Title>{art.title}</Card.Title>
-                  <p className='small'>Authors: {art.authors}</p>
-                  <Card.Text>{art.description}</Card.Text>
+                  <p className='small'> {}</p>
+                  <Card.Text>{art.exhibition_history}</Card.Text>
                   {Auth.loggedIn() && (
                     <Button
                       disabled={savedArtIds?.some((savedartId) => savedartId === art.artId)}
