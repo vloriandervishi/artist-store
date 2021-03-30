@@ -11,7 +11,7 @@ const ArtSchema = new Schema({
     type: String,
     required: true,
   },
-  // saved book id from GoogleBooks
+  // saved book id from Art
   ArtId: {
     type: String,
     required: true,
