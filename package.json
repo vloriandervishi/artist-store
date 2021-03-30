@@ -1,5 +1,5 @@
 {
-  "name": "googlebooks-app",
+  "name": "artpainting-app",
   "version": "1.0.0",
   "description": "",
   "main": "server/server.js",
@@ -7,23 +7,17 @@
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
     "start:prod": "cd server && npm start",
     "start:dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
-    "install": "cd server && npm i && cd ../client/client && npm i",
+    "install": "cd server && npm i && cd ../client && npm i",
     "heroku-postbuild": "cd client && cd client && npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vloriandervishi/book-mernengine.git"
+    "url": "https://github.com/vloriandervishi/artist-store.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@apollo/react-hooks": "^4.0.0",
-    "apollo-boost": "^0.4.9",
-    "apollo-server-express": "^2.21.1",
-    "bootstrap": "^4.6.0",
-    "graphql": "^15.5.0",
-    "graphql-tag": "^2.12.1",
     "if-env": "^1.0.4"
   },
   "devDependencies": {
