@@ -1,43 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 
-import { getMe, deleteArt } from '../utils/API';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { QUERY_ME } from '../utils/queries';
+import { REMOVE_ART } from '../utils/mutations';
+
 import Auth from '../utils/auth';
 import { removeArtId } from '../utils/localStorage';
 
 const SavedArt = () => {
-  const [userData, setUserData] = useState({});
+  const { loading, data } = useQuery(QUERY_ME);
+  const [removeArt, { error }] = useMutation(REMOVE_ART);
 
   // use this to determine if `useEffect()` hook needs to run again
-  const userDataLength = Object.keys(userData).length;
+  const userData = data?.me || {};
 
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const token = Auth.loggedIn() ? Auth.getToken() : null;
-
-        if (!token) {
-          return false;
-        }
-
-        const response = await getMe(token);
-
-        if (!response.ok) {
-          throw new Error('something went wrong!');
-        }
-
-        const user = await response.json();
-        setUserData(user);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getUserData();
-  }, [userDataLength]);
-
-  // create function that accepts the art's mongo _id value as param and deletes the art from the database
-  const handleDeleteArt = async (artId) => {
+  const handleDeleteART = async (artId) => {
+    // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -45,23 +24,18 @@ const SavedArt = () => {
     }
 
     try {
-      const response = await deleteArt(artId, token);
+      const { data } = await removeArt({
+        variables: { artId },
+      });
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      const updatedUser = await response.json();
-      setUserData(updatedUser);
-      // upon success, remove art's id from localStorage
+      // upon success, remove book's id from localStorage
       removeArtId(artId);
     } catch (err) {
       console.error(err);
     }
   };
 
-  // if data isn't here yet, say so
-  if (!userDataLength) {
+  if (loading) {
     return <h2>LOADING...</h2>;
   }
 
@@ -73,22 +47,30 @@ const SavedArt = () => {
         </Container>
       </Jumbotron>
       <Container>
-        <h2>
+        {/* <h2>
           {userData.savedart.length
             ? `Viewing ${userData.savedart.length} saved ${userData.savedart.length === 1 ? 'art' : 'art'}:`
             : 'You have no saved arts!'}
-        </h2>
+        </h2> */}
         <CardColumns>
-          {userData.savedarts.map((art) => {
+          {userData.savedarts.map((art,i) => {
             return (
-              <Card key={art.artId} border='dark'>
-                {art.image ? <Card.Img src={art.image} alt={`The cover for ${art.title}`} variant='top' /> : null}
+              <Card key={i++} border="dark">
+                {art.image_id ? (
+                  <Card.Img
+                    src={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                    alt={`The cover for ${art.title}`}
+                    variant="top"
+                  />
+                ) : null}
                 <Card.Body>
                   <Card.Title>{art.title}</Card.Title>
-                  <p className='small'>Authors: {art.authors}</p>
-                  <Card.Text>{art.description}</Card.Text>
-                  <Button className='btn-block btn-danger' onClick={() => handleDeleteArt(art.artId)}>
-                    Delete this art!
+                  <p className="small"> {}</p>
+                  <Card.Text>{art.exhibition_history}</Card.Text>
+                  <Button
+                    className='btn-block btn-danger'
+                    onClick={() =>handleDeleteART(art.ArtId)}>
+                    Delete this Book!
                   </Button>
                 </Card.Body>
               </Card>
