@@ -8,11 +8,10 @@ export const QUERY_ME = gql`
       email
       savedArts {
         artId
-        authors
         image
         description
         title
-        link
+        
       }
     }
   }
