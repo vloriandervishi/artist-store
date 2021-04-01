@@ -13,49 +13,49 @@ export const LOGIN_USER = gql`
 `;
 
 export const ADD_USER = gql`
-  mutation addUser($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username, email: $email, password: $password) {
-      token
-      user {
-        _id
-        username
-      }
-    }
-  }
+	mutation addUser($username: String!, $email: String!, $password: String!) {
+		addUser(username: $username, email: $email, password: $password) {
+			token
+			user {
+				_id
+				username
+			}
+		}
+	}
 `;
 
 export const SAVE_ART = gql`
-  mutation saveart($artData: artInput!) {
-    saveart(artData: $artData) {
-      _id
-      username
-      email
-      savedarts {
-        artId
-        authors
-        image
-        description
-        title
-        link
-      }
-    }
-  }
-`;
+	mutation saveArt($ArtData: ArtInput!) {
+		saveArt(ArtData: $ArtData) {
+			_id
+			username
+			email  
+			savedArts {
+				artId
+				authors     
+				image 
+				description 
+				link  
+				title   
+			}
+		}
+	}
+`
 
 export const REMOVE_ART = gql`
-  mutation removeart($artId: ID!) {
-    removeart(artId: $artId) {
-      _id
-      username
-      email
-      savedarts {
-        artId
-        authors
-        image
-        description
-        title
-        link
-      }
-    }
-  }
-`;
+	mutation removeArt($ArtId: ID!) {
+		removeArt(ArtId: $ArtId) {
+			_id
+			username
+			email  
+			savedArts {
+				artId
+				authors     
+				image 
+				description 
+				link  
+				title   
+			}
+		}
+	}
+`
