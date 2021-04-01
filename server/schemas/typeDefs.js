@@ -10,11 +10,9 @@ const typeDefs = gql`
   }
 
   type Art {
-    ArtId: ID!
-    authors: [String]
+    artId: ID!
     description: String
     image: String
-    link: String
     title: String!
   }
 
@@ -24,11 +22,9 @@ const typeDefs = gql`
   }
 
   input ArtInput {
-    authors: [String]
     description: String!
-    ArtId: String!
+    artId: String!
     image: String
-    link: String
     title: String!
   }
 
