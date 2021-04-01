@@ -1,7 +1,7 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
-const cors = require('cors');
+//const cors = require('cors');
 const db = require('./config/connection');
 //require('dotenv').config();
 
@@ -20,7 +20,7 @@ server.applyMiddleware({ app, path: '/api' });
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json({limit: '2mb'}));
-app.use(cors());
+//app.use(cors());
 
 
 
