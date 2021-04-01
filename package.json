@@ -1,5 +1,5 @@
 {
-  "name": "artpainting-app",
+  "name": "artist-app",
   "version": "1.0.0",
   "description": "",
   "main": "server/server.js",
@@ -8,17 +8,16 @@
     "start:prod": "cd server && npm start",
     "start:dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
     "install": "cd server && npm i && cd ../client && npm i",
-    "heroku-postbuild": "cd client && cd client && npm run build"
+    "heroku-postbuild": "cd client && npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vloriandervishi/artist-store.git"
+    "url": "git@work.github.com:arosenkranz/googlebooks-app.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cross-env": "^7.0.3",
     "if-env": "^1.0.4"
   },
   "devDependencies": {

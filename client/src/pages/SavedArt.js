@@ -1,28 +1,43 @@
-import React from "react";
-import {
-  Jumbotron,
-  Container,
-  CardColumns,
-  Card,
-  Button,
-} from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import { QUERY_ME } from "../utils/queries";
-import { REMOVE_ART } from "../utils/mutations";
-
-import Auth from "../utils/auth";
-import { removeArtId } from "../utils/localStorage";
+import { getMe, deleteArt } from '../utils/API';
+import Auth from '../utils/auth';
+import { removeArtId } from '../utils/localStorage';
 
 const SavedArt = () => {
-  const { loading, data } = useQuery(QUERY_ME);
-  const [removeArt, { error }] = useMutation(REMOVE_ART);
-  const userData = data?.me || {};
-  console.log(userData);
-  // use this to determine if `useEffect()` hook needs to run again
+  const [userData, setUserData] = useState({});
 
-  const handleDeleteART = async (artId) => {
-    // get token
+  // use this to determine if `useEffect()` hook needs to run again
+  const userDataLength = Object.keys(userData).length;
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const token = Auth.loggedIn() ? Auth.getToken() : null;
+
+        if (!token) {
+          return false;
+        }
+
+        const response = await getMe(token);
+
+        if (!response.ok) {
+          throw new Error('something went wrong!');
+        }
+
+        const user = await response.json();
+        setUserData(user);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getUserData();
+  }, [userDataLength]);
+
+  // create function that accepts the art's mongo _id value as param and deletes the art from the database
+  const handleDeleteArt = async (artId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -30,54 +45,50 @@ const SavedArt = () => {
     }
 
     try {
-      const { data } = await removeArt({
-        variables: { artId },
-      });
+      const response = await deleteArt(artId, token);
 
-      // upon success, remove book's id from localStorage
+      if (!response.ok) {
+        throw new Error('something went wrong!');
+      }
+
+      const updatedUser = await response.json();
+      setUserData(updatedUser);
+      // upon success, remove art's id from localStorage
       removeArtId(artId);
     } catch (err) {
       console.error(err);
     }
   };
 
-  if (loading) {
+  // if data isn't here yet, say so
+  if (!userDataLength) {
     return <h2>LOADING...</h2>;
   }
 
   return (
     <>
-      <Jumbotron fluid className="text-light bg-dark">
+      <Jumbotron fluid className='text-light bg-dark'>
         <Container>
-          <h1>Viewing {userData.username}!</h1>
+          <h1>Viewing saved arts!</h1>
         </Container>
       </Jumbotron>
       <Container>
-        {/* <h2>
-          {userData.savedArt.length
-            ? `Viewing ${userData.savedArt.length} saved ${userData.savedArt.length === 1 ? 'art' : 'arts'}:`
+        <h2>
+          {userData.savedart.length
+            ? `Viewing ${userData.savedart.length} saved ${userData.savedart.length === 1 ? 'art' : 'art'}:`
             : 'You have no saved arts!'}
-        </h2> */}
+        </h2>
         <CardColumns>
-          {userData.savedaArts?.map((art) => {
+          {userData.savedarts.map((art) => {
             return (
-              <Card key={art.id} border="danger">
-                {art.image_id ? (
-                  <Card.Img
-                    src={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
-                    alt={`The cover for ${art.title}`}
-                    variant="top"
-                  />
-                ) : null}
+              <Card key={art.artId} border='dark'>
+                {art.image ? <Card.Img src={art.image} alt={`The cover for ${art.title}`} variant='top' /> : null}
                 <Card.Body>
                   <Card.Title>{art.title}</Card.Title>
-                  <p className="small"> {}</p>
-                  <Card.Text>{art.exhibition_history}</Card.Text>
-                  <Button
-                    className="btn-block btn-danger"
-                    onClick={() => handleDeleteART(art.id)}
-                  >
-                    Delete this Art!
+                  <p className='small'>Authors: {art.authors}</p>
+                  <Card.Text>{art.description}</Card.Text>
+                  <Button className='btn-block btn-danger' onClick={() => handleDeleteArt(art.artId)}>
+                    Delete this art!
                   </Button>
                 </Card.Body>
               </Card>

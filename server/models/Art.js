@@ -11,7 +11,7 @@ const ArtSchema = new Schema({
     type: String,
     required: true,
   },
-  // saved book id from Art
+  // saved art id from Art
   ArtId: {
     type: String,
     required: true,
