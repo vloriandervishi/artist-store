@@ -70,7 +70,7 @@ const SavedArt = () => {
                   <Button
                     className='btn-block btn-danger'
                     onClick={() =>handleDeleteART(art.ArtId)}>
-                    Delete this Book!
+                    Delete this Art!
                   </Button>
                 </Card.Body>
               </Card>
