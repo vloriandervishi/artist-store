@@ -47,15 +47,15 @@ const SavedArt = () => {
         </Container>
       </Jumbotron>
       <Container>
-        {/* <h2>
-          {userData.savedart.length
-            ? `Viewing ${userData.savedart.length} saved ${userData.savedart.length === 1 ? 'art' : 'art'}:`
+        <h2>
+          {userData.savedArt.length
+            ? `Viewing ${userData.savedArt.length} saved ${userData.savedArt.length === 1 ? 'art' : 'art'}:`
             : 'You have no saved arts!'}
-        </h2> */}
+        </h2>
         <CardColumns>
-          {userData.savedarts.map((art,i) => {
+          {userData.savedaArts?.map((art,i) => {
             return (
-              <Card key={i++} border="dark">
+              <Card key={i++} border="danger">
                 {art.image_id ? (
                   <Card.Img
                     src={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
