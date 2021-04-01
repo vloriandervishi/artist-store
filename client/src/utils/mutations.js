@@ -31,11 +31,9 @@ export const SAVE_ART = gql`
 			username
 			email  
 			savedArts {
-				artId
-				authors     
+				artId    
 				image 
 				description 
-				link  
 				title   
 			}
 		}
@@ -49,11 +47,9 @@ export const REMOVE_ART = gql`
 			username
 			email  
 			savedArts {
-				artId
-				authors     
+				artId   
 				image 
-				description 
-				link  
+				description  
 				title   
 			}
 		}
