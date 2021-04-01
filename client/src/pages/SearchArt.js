@@ -40,18 +40,18 @@ const SearchArt = () => {
       }
 
       const items = await response.json();
-      setSearchedArt(items.data);
-      setSearchInput("");
-      // console.log(items.data);
-      // const ArtData = items.map((art) => ({
-      //   artId: art.id,
-      //   authors: art.authors || ['No author to display'],
-      //   title: art.title,
-      //   description: art.exhibition_history,
-      //   image: art.image_id || '',
-      // }));
-      //  setSearchedArt(ArtData);
-      //  setSearchInput('');
+      // setSearchedArt(items.data);
+      // setSearchInput("");
+      console.log(items.data);
+      const ArtData = items.map((art) => ({
+        artId: art.id,
+        authors: art.authors || ['No author to display'],
+        title: art.title,
+        description: art.exhibition_history,
+        image: art.image_id || '',
+      }));
+       setSearchedArt(ArtData);
+       setSearchInput('');
     } catch (err) {
       console.error(err);
     }
@@ -73,7 +73,7 @@ const SearchArt = () => {
   // create function to handle saving a book to our database
   const handleSaveArt = async (ArtId) => {
     // find the book in `searchedBooks` state by the matching id
-    const artToSave = setSearchedArt.find((art) => art.artId === ArtId);
+    const artToSave = searchArt.find((art) => art.artId === ArtId);
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
