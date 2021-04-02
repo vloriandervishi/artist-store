@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Container, Modal, Tab } from 'react-bootstrap';
+import { Table } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import SignUpForm from './SignupForm';
 import LoginForm from './LoginForm';
+
+
 
 import Auth from '../utils/auth';
 
@@ -13,7 +17,9 @@ const AppNavbar = () => {
   return (
     <>
       <Navbar bg='dark' variant='dark' expand='lg'>
+      <Table striped bordered hover>
         <Container fluid>
+          
           <Navbar.Brand as={Link} to='/'>
             Art Gallery
           </Navbar.Brand>
@@ -37,6 +43,7 @@ const AppNavbar = () => {
             </Nav>
           </Navbar.Collapse>
         </Container>
+        </Table>
       </Navbar>
       {/* set modal data up */}
       <Modal
