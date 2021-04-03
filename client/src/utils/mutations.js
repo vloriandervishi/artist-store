@@ -25,8 +25,8 @@ export const ADD_USER = gql`
 `;
 
 export const SAVE_ART = gql`
-	mutation savedArts($ArtData: ArtInput!) {
-		savedArts(ArtData: $ArtData) {
+	mutation saveArt($ArtData: ArtInput!) {
+		saveArt(ArtData: $ArtData) {
 			_id
 			username
 			email  
@@ -47,7 +47,7 @@ export const REMOVE_ART = gql`
 			username
 			email  
 			savedArts {
-				artId   
+				ArtId   
 				image 
 				description  
 				title   
