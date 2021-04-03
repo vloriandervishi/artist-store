@@ -21,7 +21,7 @@ const SavedArt = () => {
   //console.log(userData);
   // use this to determine if `useEffect()` hook needs to run again
 
-  const handleDeleteART = async (artId) => {
+  const handleDeleteART = async (ArtId) => {
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -31,11 +31,11 @@ const SavedArt = () => {
 
     try {
       const { data } = await removeArt({
-        variables: { artId },
+        variables: { ArtId },
       });
 
       // upon success, remove book's id from localStorage
-      removeArtId(artId);
+      removeArtId(ArtId);
     } catch (err) {
       console.error(err);
     }
@@ -53,18 +53,18 @@ const SavedArt = () => {
         </Container>
       </Jumbotron>
       <Container>
-        {/* <h2>
-          {userData.savedArt.length
-            ? `Viewing ${userData.savedArt.length} saved ${userData.savedArt.length === 1 ? 'art' : 'arts'}:`
+        <h2>
+          {userData.savedArts.length
+            ? `Viewing ${userData.savedArts.length} saved ${userData.savedArts.length === 1 ? 'art' : 'arts'}:`
             : 'You have no saved arts!'}
-        </h2> */}
+        </h2>
         <CardColumns>
-          {userData.savedaArts?.map((art) => {
+          {userData.savedArts?.map((art) => {
             return (
-              <Card key={art.id} border="danger">
-                {art.image_id ? (
+              <Card key={art.ArtId} border="danger">
+                {art.image? (
                   <Card.Img
-                    src={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                    src={art.image}
                     alt={`The cover for ${art.title}`}
                     variant="top"
                   />
@@ -72,10 +72,10 @@ const SavedArt = () => {
                 <Card.Body>
                   <Card.Title>{art.title}</Card.Title>
                   <p className="small"> {}</p>
-                  <Card.Text>{art.exhibition_history}</Card.Text>
+                  <Card.Text>{art.description}</Card.Text>
                   <Button
                     className="btn-block btn-danger"
-                    onClick={() => handleDeleteART(art.id)}
+                    onClick={() => handleDeleteART(art.ArtId)}
                   >
                     Delete this Art!
                   </Button>
