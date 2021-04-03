@@ -10,7 +10,7 @@ const typeDefs = gql`
   }
 
   type Art {
-    artId: ID!
+    ArtId: ID!
     description: String
     image: String
     title: String!
@@ -23,7 +23,7 @@ const typeDefs = gql`
 
   input ArtInput {
     description: String!
-    artId: String!
+    ArtId: String!
     image: String
     title: String!
   }
