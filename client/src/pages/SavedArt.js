@@ -18,7 +18,7 @@ const SavedArt = () => {
   const { loading, data } = useQuery(QUERY_ME);
   const [removeArt, { error }] = useMutation(REMOVE_ART);
   const userData = data?.me || {};
-  console.log(userData);
+  //console.log(userData);
   // use this to determine if `useEffect()` hook needs to run again
 
   const handleDeleteART = async (artId) => {
