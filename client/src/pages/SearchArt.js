@@ -22,7 +22,7 @@ const SearchArt = () => {
 
   // create state to hold saved artId values
   const [savedArtIds, setSavedArtIds] = useState(getSavedArtIds());
-  const [saveArt, { error }] = useMutation(SAVE_ART);
+  const [savedArt, { error }] = useMutation(SAVE_ART);
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
@@ -41,10 +41,9 @@ const SearchArt = () => {
 
       const items = await response.json();
       
-    
        setSearchedArt(items.data);
        setSearchInput("");
-    
+     
      
     } catch (err) {
       console.error(err);
@@ -66,27 +65,37 @@ const SearchArt = () => {
 
   // create function to handle saving a book to our database
   const handleSaveArt = async (ArtId) => {
-    // find the book in `searchedArt` state by the matching id
-    const artToSave = searchArt.find((art) => art.artId === ArtId);
-
+    //find the book in `searchedArt` state by the matching id
+  //  console.log(ArtId,'search file line 70');
+    const artToSave = searchArt.find((art) => art.id === ArtId);
+    console.log(`artToSave ${JSON.stringify(artToSave)}`);
+    console.log(`ArtId ${ArtId}`)
+     artToSave['artId'] = artToSave['id'] + "";
+    // delete artToSave['id'];
+    // artToSave['description'] = "dummy data";
+    // delete artToSave['_score'];
+    // delete artToSave['exhibition_history'];
+    // delete artToSave['image_id'];
+ 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
       return false;
     }
-
+  console.log(token,'searchArt.js file error');
     try {
-      const { data } = await saveArt({
-        variables: { items: { ...artToSave } },
+      const { data } = await savedArt({
+        
+        variables: { ArtData: { ...artToSave } },
       });
-      console.log(savedArtIds);
-      setSavedArtIds([...savedArtIds, artToSave.artId]);
-
+     // console.log(data,'data line 84');
+      setSavedArtIds([...savedArtIds, artToSave.ArtId]);
+    // console.log(setSavedArtIds,"ids");
       // if book successfully saves to user's account, save book id to state
-      setSavedArtIds([...savedArtIds, artToSave.saveId]);
+      // setSavedArtIds([...savedArtIds, artToSave.saveId]);
     } catch (err) {
-      console.error(err);
+    //  console.error(err,'line 99');
     }
   };
 
@@ -119,8 +128,8 @@ const SearchArt = () => {
 
       <Container>
         <h2>
-          {searchArt != null && searchArt.length > 0
-            ? `Viewing ${searchArtApi.length} results:`
+          {searchArt.length
+            ? `Viewing ${searchArt.length} results:`
             : "Search for Art Painting"}
         </h2>
         <CardColumns>
@@ -142,7 +151,7 @@ const SearchArt = () => {
                   {Auth.loggedIn() && (
                     <Button
                       disabled={savedArtIds?.some(
-                        (savedartId) => savedartId === art.id
+                        (savedArtId) => savedArtId === art.id
                       )}
                       className="btn-block btn-info"
                       onClick={() => handleSaveArt(art.id)}
