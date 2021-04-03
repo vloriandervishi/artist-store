@@ -22,7 +22,7 @@ const SearchArt = () => {
 
   // create state to hold saved artId values
   const [savedArtIds, setSavedArtIds] = useState(getSavedArtIds());
-  const [savedArt, { error }] = useMutation(SAVE_ART);
+  const [saveArt, { error }] = useMutation(SAVE_ART);
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
@@ -39,11 +39,22 @@ const SearchArt = () => {
         throw new Error("something went wrong!");
       }
 
-      const items = await response.json();
+      //const items = await response.json();
       
-       setSearchedArt(items.data);
-       setSearchInput("");
-     
+      //  setSearchedArt(items.data);
+      //  setSearchInput("");
+      const items  = await response.json();
+
+      const artData = items.data.map((art) => ({
+        ArtId: art.id,
+        title: art.title,
+        description: art.exhibition_history || "",
+        image: `https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`|| '',
+      }));
+      console.log(artData);
+
+      setSearchedArt(artData);
+      setSearchInput('');
      
     } catch (err) {
       console.error(err);
@@ -67,16 +78,16 @@ const SearchArt = () => {
   const handleSaveArt = async (ArtId) => {
     //find the book in `searchedArt` state by the matching id
   //  console.log(ArtId,'search file line 70');
-    const artToSave = searchArt.find((art) => art.id === ArtId);
-    console.log(`artToSave ${JSON.stringify(artToSave)}`);
-    console.log(`ArtId ${ArtId}`)
-     artToSave['artId'] = artToSave['id'] + "";
+    const artToSave = searchArt.find((art) => art.ArtId === ArtId);
+    // console.log(`artToSave ${JSON.stringify(artToSave)}`);
+    // console.log(`ArtId ${ArtId}`)
+     artToSave['ArtId'] = artToSave['ArtId'] + "";
     // delete artToSave['id'];
     // artToSave['description'] = "dummy data";
     // delete artToSave['_score'];
     // delete artToSave['exhibition_history'];
     // delete artToSave['image_id'];
- 
+    console.log(artToSave);
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -85,13 +96,14 @@ const SearchArt = () => {
     }
   console.log(token,'searchArt.js file error');
     try {
-      const { data } = await savedArt({
+      const { data } = await saveArt({
         
         variables: { ArtData: { ...artToSave } },
       });
+      //console.log(savedArtIds);
      // console.log(data,'data line 84');
       setSavedArtIds([...savedArtIds, artToSave.ArtId]);
-    // console.log(setSavedArtIds,"ids");
+     console.log(setSavedArtIds,"ids");
       // if book successfully saves to user's account, save book id to state
       // setSavedArtIds([...savedArtIds, artToSave.saveId]);
     } catch (err) {
@@ -136,10 +148,10 @@ const SearchArt = () => {
           {searchArt.map((art) => {
            
             return (
-              <Card key={art.id} border="dark">
-                {art.image_id ? (
+              <Card key={art.ArtId} border="dark">
+                {art.image ? (
                   <Card.Img
-                    src={`https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`}
+                    src={art.image}
                     alt={`The cover for ${art.title}`}
                     variant="top"
                   />
@@ -147,17 +159,17 @@ const SearchArt = () => {
                 <Card.Body>
                   <Card.Title>{art.title}</Card.Title>
                   <p className="small"> {}</p>
-                  <Card.Text>{art.exhibition_history}</Card.Text>
+                  <Card.Text>{art.description}</Card.Text>
                   {Auth.loggedIn() && (
                     <Button
                       disabled={savedArtIds?.some(
-                        (savedArtId) => savedArtId === art.id
+                        (savedArtId) => savedArtId === art.ArtId
                       )}
                       className="btn-block btn-info"
-                      onClick={() => handleSaveArt(art.id)}
+                      onClick={() => handleSaveArt(art.ArtId)}
                     >
                       {savedArtIds?.some(
-                        (savedArtId) => savedArtId === art.id
+                        (savedArtId) => savedArtId === art.ArtId
                       )
                         ? "This art has already been saved!"
                         : "Save this Art!"}
