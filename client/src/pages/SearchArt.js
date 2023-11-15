@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 // import atob from 'átob';
 import Auth from "../utils/auth";
-import {  searchArtApi} from '../utils/API';
+import { searchArtApi } from "../utils/API";
 import { saveArtIds, getSavedArtIds } from "../utils/localStorage";
 import { useMutation } from "@apollo/react-hooks";
 import { SAVE_ART } from "../utils/mutations";
@@ -28,7 +28,7 @@ const SearchArt = () => {
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
     return () => saveArtIds(savedArtIds);
-  }, );
+  });
 
   // create method to search for books and set state on form submit
   const handleSearchArtAPI = async (query) => {
@@ -40,22 +40,23 @@ const SearchArt = () => {
       }
 
       //const items = await response.json();
-      
+
       //  setSearchedArt(items.data);
       //  setSearchInput("");
-      const items  = await response.json();
+      const items = await response.json();
 
       const artData = items.data.map((art) => ({
         ArtId: art.id,
         title: art.title,
         description: art.exhibition_history || "",
-        image: `https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`|| '',
+        image:
+          `https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg` ||
+          "",
       }));
       console.log(artData);
 
       setSearchedArt(artData);
-      setSearchInput('');
-     
+      setSearchInput("");
     } catch (err) {
       console.error(err);
     }
@@ -77,37 +78,36 @@ const SearchArt = () => {
   // create function to handle saving a book to our database
   const handleSaveArt = async (ArtId) => {
     //find the book in `searchedArt` state by the matching id
-  //  console.log(ArtId,'search file line 70');
+    //  console.log(ArtId,'search file line 70');
     const artToSave = searchArt.find((art) => art.ArtId === ArtId);
     // console.log(`artToSave ${JSON.stringify(artToSave)}`);
     // console.log(`ArtId ${ArtId}`)
-     artToSave['ArtId'] = artToSave['ArtId'] + "";
+    artToSave["ArtId"] = artToSave["ArtId"] + "";
     // delete artToSave['id'];
     // artToSave['description'] = "dummy data";
     // delete artToSave['_score'];
     // delete artToSave['exhibition_history'];
     // delete artToSave['image_id'];
-    console.log(artToSave);
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
       return false;
     }
-  console.log(token,'searchArt.js file error');
+    console.log(token, "searchArt.js file error");
     try {
       const { data } = await saveArt({
-        
         variables: { ArtData: { ...artToSave } },
       });
       //console.log(savedArtIds);
-     // console.log(data,'data line 84');
+
+      console.log(data, "data line 84"); // null
       setSavedArtIds([...savedArtIds, artToSave.ArtId]);
-     console.log(setSavedArtIds,"ids");
+      console.log(setSavedArtIds, "whats saved on");
       // if book successfully saves to user's account, save book id to state
       // setSavedArtIds([...savedArtIds, artToSave.saveId]);
     } catch (err) {
-    //  console.error(err,'line 99');
+      //  console.error(err,'line 99');
     }
   };
 
@@ -146,7 +146,6 @@ const SearchArt = () => {
         </h2>
         <CardColumns>
           {searchArt.map((art) => {
-           
             return (
               <Card key={art.ArtId} border="dark">
                 {art.image ? (

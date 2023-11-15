@@ -12,7 +12,7 @@ module.exports = {
     //["Bearer", "<tokenvalue>"]
     if (req.headers.authorization) {
       token = token.split(" ").pop().trim();
-      console.log(token, "auth console token");
+      console.log(token, " token");
     }
     if (!token) {
       // return res.status(400).json({ message: 'You have no token!' });
