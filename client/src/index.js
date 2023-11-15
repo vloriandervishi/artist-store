@@ -8,7 +8,6 @@ import reportWebVitals from "./reportWebVitals";
 import * as serviceWorker from "./serviceWorker";
 
 import * as ReactDOM from "react-dom/client";
-// import App from "App";
 
 const container = document.getElementById("root");
 
@@ -16,10 +15,9 @@ const container = document.getElementById("root");
 const root = ReactDOM.createRoot(container);
 
 // Initial render
-root.render(<App name="Artist Store" />);
+root.render(<App />);
 
 // During an update, there is no need to pass the container again
-root.render(<App name="Aritst Store" />);
 // ReactDOM.render(
 //   <React.StrictMode>
 //     <App />
