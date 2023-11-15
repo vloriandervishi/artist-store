@@ -13,12 +13,12 @@ import { REMOVE_ART } from "../utils/mutations";
 
 import Auth from "../utils/auth";
 import { removeArtId } from "../utils/localStorage";
-
 const SavedArt = () => {
   const { loading, data } = useQuery(QUERY_ME);
   const [removeArt, { error }] = useMutation(REMOVE_ART);
   const userData = data?.me || {};
-  //console.log(userData);
+  console.log(data, "line ---20");
+
   // use this to determine if `useEffect()` hook needs to run again
 
   const handleDeleteART = async (ArtId) => {
@@ -28,7 +28,6 @@ const SavedArt = () => {
     if (!token) {
       return false;
     }
-
     try {
       const { data } = await removeArt({
         variables: { ArtId },
@@ -55,14 +54,16 @@ const SavedArt = () => {
       <Container>
         <h2>
           {userData.savedArts.length
-            ? `Viewing ${userData.savedArts.length} saved ${userData.savedArts.length === 1 ? 'art' : 'arts'}:`
-            : 'You have no saved arts!'}
+            ? `Viewing ${userData.savedArts.length} saved ${
+                userData.savedArts.length === 1 ? "art" : "arts"
+              }:`
+            : "You have no saved arts!"}
         </h2>
         <CardColumns>
           {userData.savedArts?.map((art) => {
             return (
               <Card key={art.ArtId} border="danger">
-                {art.image? (
+                {art.image ? (
                   <Card.Img
                     src={art.image}
                     alt={`The cover for ${art.title}`}
