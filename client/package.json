@@ -50,7 +50,8 @@
   },
   "main": "index.js",
   "devDependencies": {
-    "concurrently": "^6.0.0"
+    "concurrently": "^6.0.0",
+    "react-error-overlay": "^6.0.9"
   },
   "keywords": [],
   "author": "",
